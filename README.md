@@ -264,3 +264,23 @@ nslookup bigquery.googleapis.com
 # Tester via gcloud
 bq ls --project_id=data-eng-clean
 ```
+## 💬 Question d'entretien : BigQuery vs Compute Engine
+
+### Pourquoi avez-vous choisi d'utiliser BigQuery plutôt que des VMs Compute Engine ?
+
+**Ma réponse :**
+
+BigQuery est **serverless** : je ne paye que les requêtes exécutées, pas des VMs allumées 24h/24. Pour des pipelines data, le modèle serverless est :
+
+- **Plus économique** : pas de coût fixe, seulement ce que j'utilise réellement
+- **Plus scalable** : le scaling est automatique et instantané, sans gestion manuelle
+
+Les VMs Compute Engine seraient nécessaires si j'avais :
+
+- Des workloads Python complexes **non compatibles SQL**
+- Besoin d'héberger une **application web** (dashboard, API)
+- Des traitements **stateful** nécessitant une persistance locale
+
+**Dans mon projet :** toutes les transformations sont en SQL via dbt, donc une infrastructure **serverless** (BigQuery + Cloud Storage) est parfaitement adaptée.
+
+---
