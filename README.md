@@ -225,3 +225,42 @@ data-eng-clean (projet GCP)
 └── IAM
     └── dbt-sa-clean@data-eng-clean.iam.gserviceaccount.com
 ```
+## Vider le cache DNS
+```powershell
+# Vider le cache DNS Windows
+ipconfig /flushdns
+
+# Redémarrer le service DNS client
+Restart-Service -Name "Dnscache" -Force
+```
+## Utiliser les DNS Google
+```powershell
+# Modifier les serveurs DNS (administrateur requis)
+netsh interface ip set dns "Wi-Fi" static 8.8.8.8
+netsh interface ip add dns "Wi-Fi" 8.8.4.4 index=2
+```
+### Redémarrer PowerShell et réauthentifier
+```powershell
+# Quitter et rouvrir PowerShell (en tant qu'administrateur)
+
+# Reconnecter gcloud
+gcloud auth application-default login
+
+# Refixer le projet
+gcloud config set project data-eng-clean
+
+# Relancer dbt
+cd C:\Terraform_dbt_gcp\dbt_bgquery_v2\dbt_bgquery_v2
+dbt run
+```
+### Vérifier la connexion de base
+```powershell
+# Tester la connexion à Google
+ping 8.8.8.8
+
+# Tester la résolution DNS
+nslookup bigquery.googleapis.com
+
+# Tester via gcloud
+bq ls --project_id=data-eng-clean
+```
